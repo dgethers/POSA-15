@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.widget.Toast;
 
 /**
  * An Activity that downloads an image, stores it in a local file on
@@ -23,13 +27,17 @@ public class DownloadImageActivity extends Activity {
      * @param savedInstanceState object that contains saved state information.
      */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         // Always call super class for necessary
         // initialization/implementation.
-        // @@ TODO -- you fill in here.
+        // @@ TODO -- you fill in here. (complete)
+        super.onCreate(savedInstanceState);
 
         // Get the URL associated with the Intent data.
-        // @@ TODO -- you fill in here.
+        // @@ TODO -- you fill in here. (complete)
+//        final Uri uri = (Uri) savedInstanceState.get("URL");
+        final Uri data = getIntent().getExtras().getParcelable("URL");
+        Log.d(TAG, data.toString());
 
         // Download the image in the background, create an Intent that
         // contains the path to the image file, and set this as the
@@ -39,5 +47,32 @@ public class DownloadImageActivity extends Activity {
         // concurrency framework.  Note that the finish() method
         // should be called in the UI thread, whereas the other
         // methods should be called in the background thread.
+
+        Thread downloader = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                Uri downloadImage = DownloadUtils.downloadImage(getApplicationContext(), data);
+                Message msgObj = handler.obtainMessage();
+                Bundle bundle = new Bundle();
+                bundle.putString("URI", downloadImage.toString());
+                msgObj.setData(bundle);
+                handler.sendMessage(msgObj);
+            }
+
+            private final Handler handler = new Handler() {
+
+                public void handleMessage(Message msg) {
+                    Intent intent = new Intent();
+                    intent.putExtra("RESULT", msg.getData().getString("URI"));
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            };
+        });
+
+        downloader.start();
+
+
     }
 }
