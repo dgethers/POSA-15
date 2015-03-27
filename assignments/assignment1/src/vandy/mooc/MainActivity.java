@@ -7,11 +7,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.URLUtil;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.io.File;
 
 /**
  * A main Activity that prompts the user for a URL to an image and
@@ -53,14 +56,17 @@ public class MainActivity extends LifecycleLoggingActivity {
     protected void onCreate(Bundle savedInstanceState) {
         // Always call super class for necessary
         // initialization/implementation.
-        // @@ TODO -- you fill in here.
+        // @@ TODO -- you fill in here. (complete)
+        super.onCreate(savedInstanceState);
 
         // Set the default layout.
-        // @@ TODO -- you fill in here.
+        // @@ TODO -- you fill in here. (complete)
+        setContentView(R.layout.main_activity);
 
         // Cache the EditText that holds the urls entered by the user
         // (if any).
-        // @@ TODO -- you fill in here.
+        // @@ TODO -- you fill in here. (complete)
+        mUrlEditText = (EditText) findViewById(R.id.url);
     }
 
     /**
@@ -136,8 +142,17 @@ public class MainActivity extends LifecycleLoggingActivity {
     private Intent makeGalleryIntent(String pathToImageFile) {
         // Create an intent that will start the Gallery app to view
         // the image.
-    	// TODO -- you fill in here, replacing "false" with the proper
+    	// TODO -- you fill in here, replacing "false" with the proper (complete)
     	// code.
+        /*
+        Uri hacked_uri = Uri.parse("file://" + uri.getPath());
+        intent.setDataAndType(hacked_uri, "image/*");
+         */
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.fromFile(new File(pathToImageFile)), "image/*");
+
+        return intent;
     }
 
     /**
@@ -145,8 +160,13 @@ public class MainActivity extends LifecycleLoggingActivity {
      */
     private Intent makeDownloadImageIntent(Uri url) {
         // Create an intent that will download the image from the web.
-    	// TODO -- you fill in here, replacing "false" with the proper
+    	// TODO -- you fill in here, replacing "false" with the proper (complete)
     	// code.
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setDataAndType(url, "image/*");
+
+        return intent;
     }
 
     /**
@@ -165,9 +185,11 @@ public class MainActivity extends LifecycleLoggingActivity {
 
         // Do a sanity check to ensure the URL is valid, popping up a
         // toast if the URL is invalid.
-        // @@ TODO -- you fill in here, replacing "true" with the
+        // @@ TODO -- you fill in here, replacing "true" with the (complete)
         // proper code.
-        if (true)
+        boolean isFormattedCorrectly = Patterns.WEB_URL.matcher(uri).matches();
+        //URLUtil.isHttpsUrl(uri); - old way of validating URL, remove after analysis
+        if (isFormattedCorrectly)
             return url;
         else {
             Toast.makeText(this,
