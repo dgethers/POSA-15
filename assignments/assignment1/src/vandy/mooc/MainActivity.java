@@ -50,7 +50,7 @@ public class MainActivity extends LifecycleLoggingActivity {
      * One time initialization code goes here, e.g., UI layout and
      * some class scope variable initialization.
      *
-     * @param Bundle object that contains saved state information.
+     * @param savedInstanceState object that contains saved state information.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,7 +142,7 @@ public class MainActivity extends LifecycleLoggingActivity {
     private Intent makeGalleryIntent(String pathToImageFile) {
         // Create an intent that will start the Gallery app to view
         // the image.
-    	// TODO -- you fill in here, replacing "false" with the proper (complete)
+    	// TODO -- you fill in here, replacing "null" with the proper (complete)
     	// code.
         /*
         Uri hacked_uri = Uri.parse("file://" + uri.getPath());
@@ -160,7 +160,7 @@ public class MainActivity extends LifecycleLoggingActivity {
      */
     private Intent makeDownloadImageIntent(Uri url) {
         // Create an intent that will download the image from the web.
-    	// TODO -- you fill in here, replacing "false" with the proper (complete)
+    	// TODO -- you fill in here, replacing "null" with the proper (complete)
     	// code.
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -185,7 +185,7 @@ public class MainActivity extends LifecycleLoggingActivity {
 
         // Do a sanity check to ensure the URL is valid, popping up a
         // toast if the URL is invalid.
-        // @@ TODO -- you fill in here, replacing "true" with the (complete)
+        // @@ TODO -- you fill in here, replacing "true" with the
         // proper code.
         boolean isFormattedCorrectly = Patterns.WEB_URL.matcher(uri).matches();
         //URLUtil.isHttpsUrl(uri); - old way of validating URL, remove after analysis
