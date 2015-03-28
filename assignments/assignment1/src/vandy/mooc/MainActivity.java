@@ -122,7 +122,7 @@ public class MainActivity extends LifecycleLoggingActivity {
         // Check if the started Activity did not complete successfully
         // and inform the user a problem occurred when trying to
         // download contents at the given URL.
-        else { //determine code for activity no completing successfully
+        else {
             Toast.makeText(this,
                     "A problem occurred trying to download contents of URL",
                     Toast.LENGTH_SHORT).show();
@@ -159,10 +159,8 @@ public class MainActivity extends LifecycleLoggingActivity {
      * Get the URL to download based on user input.
      */
     protected Uri getUrl() {
-        Uri url = null;
-
         // Get the text the user typed in the edit text (if anything).
-        url = Uri.parse(mUrlEditText.getText().toString());
+        Uri url = Uri.parse(mUrlEditText.getText().toString());
 
         // If the user didn't provide a URL then use the default.
         String uri = url.toString();
@@ -171,17 +169,16 @@ public class MainActivity extends LifecycleLoggingActivity {
 
         // Do a sanity check to ensure the URL is valid, popping up a
         // toast if the URL is invalid.
-        boolean isFormattedCorrectly = Patterns.WEB_URL.matcher(uri).matches();
-//        boolean isFormattedCorrectly = URLUtil.isHttpsUrl(uri);
+        boolean isUriFormatCorrect = Patterns.WEB_URL.matcher(url.toString()).matches();
         Log.d(TAG, "getUrl->url: " + url);
 
-        if (isFormattedCorrectly || url == mDefaultUrl)
+        if (isUriFormatCorrect)
             return url;
         else {
             Toast.makeText(this,
-                           "Invalid URL",
+                           "Invalid URL, using default",
                            Toast.LENGTH_SHORT).show();
-            return null;
+            return mDefaultUrl;
         } 
     }
 
