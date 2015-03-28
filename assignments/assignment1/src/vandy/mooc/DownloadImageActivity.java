@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 /**
  * An Activity that downloads an image, stores it in a local file on
@@ -30,23 +29,15 @@ public class DownloadImageActivity extends Activity {
     public void onCreate(final Bundle savedInstanceState) {
         // Always call super class for necessary
         // initialization/implementation.
-        // @@ TODO -- you fill in here. (complete)
         super.onCreate(savedInstanceState);
 
         // Get the URL associated with the Intent data.
-        // @@ TODO -- you fill in here. (complete)
-//        final Uri uri = (Uri) savedInstanceState.get("URL");
         final Uri data = getIntent().getExtras().getParcelable("URL");
-        Log.d(TAG, data.toString());
+        Log.d(TAG, "onCreate->data: " + data);
 
         // Download the image in the background, create an Intent that
         // contains the path to the image file, and set this as the
         // result of the Activity.
-
-        // @@ TODO -- you fill in here using the Android "HaMeR"
-        // concurrency framework.  Note that the finish() method
-        // should be called in the UI thread, whereas the other
-        // methods should be called in the background thread.
 
         Thread downloader = new Thread(new Runnable() {
 
@@ -60,7 +51,7 @@ public class DownloadImageActivity extends Activity {
                 handler.sendMessage(msgObj);
             }
 
-            private final Handler handler = new Handler() {
+            private final Handler handler = new Handler(getMainLooper()) {
 
                 public void handleMessage(Message msg) {
                     Intent intent = new Intent();
@@ -72,7 +63,7 @@ public class DownloadImageActivity extends Activity {
         });
 
         downloader.start();
-
-
     }
+
+
 }
