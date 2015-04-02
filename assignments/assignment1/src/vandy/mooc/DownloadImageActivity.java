@@ -26,7 +26,7 @@ public class DownloadImageActivity extends Activity {
      * @param savedInstanceState object that contains saved state information.
      */
     @Override
-    public void onCreate(final Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         // Always call super class for necessary
         // initialization/implementation.
         super.onCreate(savedInstanceState);
