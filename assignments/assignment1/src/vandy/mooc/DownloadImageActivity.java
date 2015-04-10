@@ -32,7 +32,7 @@ public class DownloadImageActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         // Get the URL associated with the Intent data.
-        final Uri data = getIntent().getExtras().getParcelable("URL");
+        final Uri data = getIntent().getData();
         Log.d(TAG, "onCreate->data: " + data);
 
         // Download the image in the background, create an Intent that
