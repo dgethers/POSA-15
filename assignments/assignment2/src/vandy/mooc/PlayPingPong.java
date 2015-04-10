@@ -35,6 +35,7 @@ public class PlayPingPong implements Runnable {
      * Define a pair of Handlers used to send/handle Messages via the
      * HandlerThreads.
      */
+    // @@ TODO - you fill in here.
     private Handler[] mHandlers = new Handler[PingPong.values().length];
 
     /**
@@ -42,6 +43,7 @@ public class PlayPingPong implements Runnable {
      * HandlerThreads are fully initialized before the ping-pong
      * algorithm begins.
      */
+    // @@ TODO - you fill in here.
     private CyclicBarrier cyclicBarrier = new CyclicBarrier(PingPong.values().length);
 
     /**
@@ -72,6 +74,7 @@ public class PlayPingPong implements Runnable {
          */
         public PingPongThread(PingPong myType) {
         	super(myType.toString());
+            // @@ TODO - you fill in here.
             mMyType = myType;
         }
 
@@ -84,11 +87,13 @@ public class PlayPingPong implements Runnable {
         protected void onLooperPrepared() {
             // Create the Handler that will service this type of
             // Handler, i.e., either PING or PONG.
+            // @@ TODO - you fill in here.
             mHandlers[mMyType.ordinal()] = new Handler(this);
 
 
             try {
                 // Wait for both Threads to initialize their Handlers.
+                // @@ TODO - you fill in here.
                 cyclicBarrier.await();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -98,6 +103,7 @@ public class PlayPingPong implements Runnable {
             // where the PING Handler is the "target" and the PONG
             // Handler is the "obj" to use for the reply and (2)
             // sending the Message to the PING_THREAD's Handler.
+            // @@ TODO - you fill in here.
             if (mMyType == PingPong.PING) {
                 Message msg = Message.obtain(mHandlers[PingPong.PING.ordinal()]);
                 msg.obj = mHandlers[PingPong.PONG.ordinal()];
@@ -113,6 +119,7 @@ public class PlayPingPong implements Runnable {
         public boolean handleMessage(Message reqMsg) {
             // Print the appropriate string if this thread isn't done
             // with all its iterations yet.
+            // @@ TODO - you fill in here, replacing "true" with the
             // appropriate code.
             if (mIterationsCompleted < mMaxIterations) {
                 if (mMyType == PingPong.PONG) {
@@ -124,19 +131,23 @@ public class PlayPingPong implements Runnable {
             } else {
                 // Shutdown the HandlerThread to the main PingPong
                 // thread can join with it.
+                // @@ TODO - you fill in here.
                 reqMsg.getTarget().removeCallbacksAndMessages(null);
+
                 return false;
             }
 
             // Create a Message that contains the Handler as the
             // reqMsg "target" and our Handler as the "obj" to use for
             // the reply.
+            // @@ TODO - you fill in here.
             Message msg = Message.obtain((Handler) reqMsg.obj);
             msg.obj = reqMsg.getTarget();
 
             // Return control to the Handler in the other
             // HandlerThread, which is the "target" of the msg
             // parameter.
+            // @@ TODO - you fill in here.
             msg.sendToTarget();
 
             return true;
@@ -164,17 +175,20 @@ public class PlayPingPong implements Runnable {
         mOutputStrategy.print("Ready...Set...Go!");
        
         // Create the ping and pong threads.
+        // @@ TODO - you fill in here.
         Thread pingThread = new Thread(new PingPongThread(PingPong.PING));
         Thread pongThread = new Thread(new PingPongThread(PingPong.PONG));
 
 
         // Start ping and pong threads, which cause their Looper to
         // loop.
+        // @@ TODO - you fill in here.
         pingThread.start();
         pongThread.start();
 
         // Barrier synchronization to wait for all work to be done
         // before exiting play().
+        // @@ TODO - you fill in here.
         try {
             pingThread.join();
             pongThread.join();
