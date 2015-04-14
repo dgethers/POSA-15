@@ -123,9 +123,9 @@ public class PlayPingPong implements Runnable {
             // appropriate code.
             if (mIterationsCompleted < mMaxIterations) {
                 if (mMyType == PingPong.PONG) {
-                    mOutputStrategy.print("\nPONG!");
+                    mOutputStrategy.print("\nPONG(" + mIterationsCompleted + ")");
                 } else {
-                    mOutputStrategy.print("\nPING!");
+                    mOutputStrategy.print("\nPING(" + mIterationsCompleted + ")");
                 }
                 mIterationsCompleted++;
             } else {
