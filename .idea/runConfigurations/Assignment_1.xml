@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Assignment 2" type="AndroidRunConfigurationType" factoryName="Android Application">
-    <module name="assignment2" />
+  <configuration default="false" name="Assignment 1" type="AndroidRunConfigurationType" factoryName="Android Application">
+    <module name="assignment1" />
     <option name="ACTIVITY_CLASS" value="" />
     <option name="MODE" value="default_activity" />
     <option name="DEPLOY" value="true" />
