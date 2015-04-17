@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -23,8 +22,7 @@ public class MainActivity extends LifecycleLoggingActivity {
 
     private EditText mUrlEditText;
 
-    private Uri mDefaultUrl =
-        Uri.parse("http://www.dre.vanderbilt.edu/~schmidt/robot.png");
+    private Uri mDefaultUrl = Uri.parse("http://www.dre.vanderbilt.edu/~schmidt/robot.png");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,23 +32,18 @@ public class MainActivity extends LifecycleLoggingActivity {
     }
 
     public void downloadImage(View view) {
-        try {
-            hideKeyboard(this,
-                         mUrlEditText.getWindowToken());
+        hideKeyboard(this,
+                mUrlEditText.getWindowToken());
 
-            Intent imageDownloadIntent = makeDownloadImageIntent(getUrl());
+        Uri url = getUrl();
+        if (url == null) {
+            Toast.makeText(this, "Invalid URL", Toast.LENGTH_SHORT).show();
+        } else {
+            Intent imageDownloadIntent = makeDownloadImageIntent(url);
             startActivityForResult(imageDownloadIntent, DOWNLOAD_IMAGE_REQUEST);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
-    /**
-     * Hook method called back by the Android Activity framework when
-     * an Activity that's been launched exits, giving the requestCode
-     * it was started with, the resultCode it returned, and any
-     * additional data from it.
-     */
     @Override
     protected void onActivityResult(int requestCode,
                                     int resultCode,
@@ -61,11 +54,10 @@ public class MainActivity extends LifecycleLoggingActivity {
 
                 startActivity(intent);
             }
-        }
-        else {
+        } else {
             Toast.makeText(this, "A problem occurred trying to download contents of URL", Toast.LENGTH_SHORT).show();
         }
-    }    
+    }
 
     private Intent makeGalleryIntent(String pathToImageFile) {
         Intent intent = new Intent();
@@ -88,21 +80,19 @@ public class MainActivity extends LifecycleLoggingActivity {
             url = mDefaultUrl;
 
         boolean isUriFormatCorrect = Patterns.WEB_URL.matcher(url.toString()).matches();
-        Log.d(TAG, "getUrl->url: " + url);
 
         if (isUriFormatCorrect)
             return url;
         else {
-            Toast.makeText(this, "Invalid URL, using default", Toast.LENGTH_SHORT).show();
-            return mDefaultUrl;
-        } 
+            return null;
+        }
     }
 
     public void hideKeyboard(Activity activity,
                              IBinder windowToken) {
         InputMethodManager mgr =
-            (InputMethodManager) activity.getSystemService
-            (Context.INPUT_METHOD_SERVICE);
+                (InputMethodManager) activity.getSystemService
+                        (Context.INPUT_METHOD_SERVICE);
         mgr.hideSoftInputFromWindow(windowToken, 0);
     }
 }
