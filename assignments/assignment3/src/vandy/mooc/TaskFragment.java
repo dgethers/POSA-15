@@ -46,6 +46,7 @@ public class TaskFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        mParentActivity = null;
     }
 
 
