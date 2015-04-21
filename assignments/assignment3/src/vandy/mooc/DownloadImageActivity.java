@@ -1,60 +1,49 @@
 package vandy.mooc;
 
-import android.content.Intent;
+import android.app.FragmentManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 
-public class DownloadImageActivity extends LifecycleLoggingActivity {
+public class DownloadImageActivity extends LifecycleLoggingActivity implements TaskFragment.TaskCallbacks {
 
 
     //TODO: handle tasks with orientation change
     private final String TAG = getClass().getSimpleName();
+    private static final String TAG_TASK_FRAGMENT = "task_fragment";
+    private TaskFragment mTaskFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final Uri data = getIntent().getData();
-
-        new DownloadAsyncTask().execute(data);
-    }
-
-
-    private class DownloadAsyncTask extends AsyncTask<Uri, Integer, Uri> {
-
-        @Override
-        protected Uri doInBackground(Uri... params) {
-            //TODO: Possbile handling of multiple URIs passed in.
-            Uri downloadedImage = Utils.downloadImage(getApplicationContext(), params[0]);
-            return downloadedImage;
-        }
-
-
-        @Override
-        protected void onPostExecute(Uri uri) {
-            Log.d(TAG, "onPostExecute in DownloadAsyncTask");
-            new ApplyFilterAsyncTask().execute(uri);
+        FragmentManager fm = getFragmentManager();
+        mTaskFragment = (TaskFragment) fm.findFragmentByTag(TAG_TASK_FRAGMENT);
+        // If the Fragment is non-null, then it is currently being
+        // retained across a configuration change.
+        if (mTaskFragment == null) {
+            mTaskFragment = new TaskFragment();
+            fm.beginTransaction().add(mTaskFragment, TAG_TASK_FRAGMENT).commit();
         }
     }
 
-    private class ApplyFilterAsyncTask extends AsyncTask<Uri, Integer, Uri> {
 
-        @Override
-        protected Uri doInBackground(Uri... params) {
-            Uri grayScaledImage = Utils.grayScaleFilter(getApplicationContext(), params[0]);
-            return grayScaledImage;
-        }
+    @Override
+    public Uri onPreExecute() {
+        return getIntent().getData();
+    }
 
-        @Override
-        protected void onPostExecute(Uri uri) {
-            Log.d(TAG, "onPostExecute in ApplyFilterAsyncTask");
-            Intent intent = new Intent();
-            Log.d(TAG, "result is: " + uri.toString());
-            intent.putExtra("RESULT", uri.toString());
-            setResult(RESULT_OK, intent);
-            finish();
-        }
+    @Override
+    public void onProgressUpdate(int percent) {
+
+    }
+
+    @Override
+    public void onCancelled() {
+
+    }
+
+    @Override
+    public void onPostExecute() {
+
     }
 }

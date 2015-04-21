@@ -1,6 +1,7 @@
 package vandy.mooc;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,17 +19,21 @@ public class MainActivity extends LifecycleLoggingActivity {
 
     private final String TAG = getClass().getSimpleName();
 
+
     private static final int DOWNLOAD_IMAGE_REQUEST = 1;
 
     private EditText mUrlEditText;
 
     private Uri mDefaultUrl = Uri.parse("http://www.dre.vanderbilt.edu/~schmidt/robot.png");
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         mUrlEditText = (EditText) findViewById(R.id.url);
+
+
     }
 
     public void downloadImage(View view) {
@@ -69,7 +74,11 @@ public class MainActivity extends LifecycleLoggingActivity {
 
     private Intent makeDownloadImageIntent(Uri url) {
 
-        return new Intent(Intent.ACTION_WEB_SEARCH, url);
+        Intent downloadActivityIntent = new Intent(getApplicationContext(), DownloadImageActivity.class);
+        downloadActivityIntent.setData(url);
+        return downloadActivityIntent;
+
+//        return new Intent(Intent.ACTION_WEB_SEARCH, url);
     }
 
     protected Uri getUrl() {
