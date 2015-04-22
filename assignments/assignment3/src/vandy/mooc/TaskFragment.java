@@ -18,6 +18,8 @@ public class TaskFragment extends Fragment {
     interface TaskCallbacks {
 
         Uri onPreExecute();
+
+        void onProgressChange(int value);
     }
 
     private TaskCallbacks mParentActivity;
@@ -55,6 +57,7 @@ public class TaskFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Uri uri) {
+            mParentActivity.onProgressChange(50);
             new ApplyFilterAsyncTask().execute(uri);
         }
     }
@@ -71,6 +74,7 @@ public class TaskFragment extends Fragment {
         protected void onPostExecute(Uri uri) {
             Intent intent = new Intent();
             intent.putExtra("RESULT", uri.toString());
+            mParentActivity.onProgressChange(100);
             getActivity().setResult(Activity.RESULT_OK, intent);
             getActivity().finish();
         }
