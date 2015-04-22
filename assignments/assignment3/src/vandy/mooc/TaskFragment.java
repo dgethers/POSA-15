@@ -16,13 +16,8 @@ import android.util.Log;
 public class TaskFragment extends Fragment {
 
     interface TaskCallbacks {
+
         Uri onPreExecute();
-
-        void onProgressUpdate(int percent);
-
-        void onCancelled();
-
-        void onPostExecute();
     }
 
     private TaskCallbacks mParentActivity;
@@ -54,20 +49,12 @@ public class TaskFragment extends Fragment {
 
         @Override
         protected Uri doInBackground(Uri... params) {
-            //TODO: Possbile handling of multiple URIs passed in.
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                Log.e(TAG, e.toString());
-            }
-            Uri downloadedImage = Utils.downloadImage(getActivity().getApplicationContext(), params[0]);
-            return downloadedImage;
+            Log.d(TAG, "Async Task downloading image");
+            return Utils.downloadImage(getActivity().getApplicationContext(), params[0]);
         }
-
 
         @Override
         protected void onPostExecute(Uri uri) {
-            Log.d(TAG, "onPostExecute in DownloadAsyncTask");
             new ApplyFilterAsyncTask().execute(uri);
         }
     }
@@ -76,20 +63,16 @@ public class TaskFragment extends Fragment {
 
         @Override
         protected Uri doInBackground(Uri... params) {
-            Uri grayScaledImage = Utils.grayScaleFilter(getActivity().getApplicationContext(), params[0]);
-            return grayScaledImage;
+            Log.d(TAG, "Async Task applying gray scale filter to image");
+            return Utils.grayScaleFilter(getActivity().getApplicationContext(), params[0]);
         }
 
         @Override
         protected void onPostExecute(Uri uri) {
-            Log.d(TAG, "onPostExecute in ApplyFilterAsyncTask");
             Intent intent = new Intent();
-            Log.d(TAG, "result is: " + uri.toString());
             intent.putExtra("RESULT", uri.toString());
             getActivity().setResult(Activity.RESULT_OK, intent);
             getActivity().finish();
         }
     }
-
-
 }

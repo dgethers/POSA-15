@@ -1,12 +1,12 @@
 package vandy.mooc;
 
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -15,25 +15,18 @@ import android.widget.Toast;
 
 import java.io.File;
 
-public class MainActivity extends LifecycleLoggingActivity {
-
-    private final String TAG = getClass().getSimpleName();
-
+public class MainActivity extends Activity {
 
     private static final int DOWNLOAD_IMAGE_REQUEST = 1;
-
+    private final String TAG = getClass().getSimpleName();
     private EditText mUrlEditText;
-
     private Uri mDefaultUrl = Uri.parse("http://www.dre.vanderbilt.edu/~schmidt/robot.png");
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         mUrlEditText = (EditText) findViewById(R.id.url);
-
-
     }
 
     public void downloadImage(View view) {
@@ -41,6 +34,7 @@ public class MainActivity extends LifecycleLoggingActivity {
                 mUrlEditText.getWindowToken());
 
         Uri url = getUrl();
+        Log.d(TAG, "Url retrieved is: " + url);
         if (url == null) {
             Toast.makeText(this, "Invalid URL", Toast.LENGTH_SHORT).show();
         } else {
@@ -74,11 +68,7 @@ public class MainActivity extends LifecycleLoggingActivity {
 
     private Intent makeDownloadImageIntent(Uri url) {
 
-        Intent downloadActivityIntent = new Intent(getApplicationContext(), DownloadImageActivity.class);
-        downloadActivityIntent.setData(url);
-        return downloadActivityIntent;
-
-//        return new Intent(Intent.ACTION_WEB_SEARCH, url);
+        return new Intent(Intent.ACTION_WEB_SEARCH, url);
     }
 
     protected Uri getUrl() {
